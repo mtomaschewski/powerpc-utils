@@ -375,7 +375,6 @@ do_config_vdevice_wicked() {
 	if ! suse_ifcfg_is_bond_master "$BONDNAME"; then
 		hcnlog INFO "create bonding for $BONDNAME with bond.options $BONDOPTIONS "
 		suse_ifcfg_bond_create "$BONDNAME" "$BONDING_MODULE_OPTS"
-        wicked ifup "$BONDNAME"
 	fi
 
 	# Add device to the bond
@@ -384,17 +383,17 @@ do_config_vdevice_wicked() {
 		hcnlog DEBUG "enslave $DEVNAME failed"
 		return $E_ENODEV
 	fi
-	hcnlog DEBUG "Bring up the $DEVNAME interface"
 
-
-	# if the device is primary, and link is up, force it as primary se
+	# if the device is primary, and link is up, force it as primary
 	if [[ $MODE == "primary" ]]; then
 		hcnlog INFO "Change bonding primary slave to $DEVNAME"
 #		echo "$DEVNAME" >"$BOND_PATH"/active_slave
 		suse_ifcfg_bond_set_primary "$BONDNAME" "$DEVNAME"
-        wicked ifup "$BONDNAME"
 	fi
+
+	hcnlog DEBUG "Bring up the $BONDNAME interface"
 	wicked_reload "$BONDNAME"
+
 	hcnlog DEBUG "do_config_vdevice: exit"
 	return $E_SUCCESS
 }
