@@ -374,7 +374,10 @@ do_config_vdevice_wicked() {
 
 	if ! suse_ifcfg_is_bond_master "$BONDNAME"; then
 		hcnlog INFO "create bonding for $BONDNAME with bond.options $BONDOPTIONS "
-		suse_ifcfg_bond_create "$BONDNAME" "$BONDING_MODULE_OPTS"
+		# Note: wicked needs spaces in BONDING_MODULE_OPTS as comma is
+		#       used/reserved to separate multiple arp_ip_targets, thus
+		#	this could result in invalid options...:
+		suse_ifcfg_bond_create "$BONDNAME" "${BONDOPTIONS//,/ }"
 	fi
 
 	# Add device to the bond
