@@ -24,6 +24,7 @@
 FEATURES="vnic"
 PATH=$PATH:/bin:/usr/bin:/sbin:/usr/sbin
 BOND_BASEPATH="/sys/class/net"
+BOND_MODPROBE_OPTS="max_bonds=0"
 BONDOPTIONS="mode=1,miimon=100,fail_over_mac=2"
 IFCONFIG_PATH="/etc/sysconfig/network-scripts"
 PSERIES_PLATFORM=$(dirname "$0")/pseries_platform
@@ -801,7 +802,7 @@ fi
 #Validate bonding module is loaded
 if ! lsmod | grep -q bonding; then
 	hcnlog DEBUG "HCNMGR: Bonding module not loaded, load module ..."
-	if ! modprobe bonding; then
+	if ! modprobe bonding $BOND_MODPROBE_OPTS; then
 		err $E_NOMODULE
 	fi
 fi
