@@ -43,7 +43,7 @@ VIO_TYPE=""
 DISTRO=""
 SERVICE=""
 
-source /usr/sbins/functions.suse
+source /usr/lib/powerpc-utils/functions.suse
 
 # Usage statements
 usage() {
