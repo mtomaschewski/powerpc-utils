@@ -387,13 +387,13 @@ do_config_vdevice_wicked() {
 		return $E_ENODEV
 	fi
 
-	# if the device is primary, and link is up, force it as primary
+	# if the device is primary, adjust it in the config
 	if [[ $MODE == "primary" ]]; then
 		hcnlog INFO "Change bonding primary slave to $DEVNAME"
-#		echo "$DEVNAME" >"$BOND_PATH"/active_slave
 		suse_ifcfg_bond_set_primary "$BONDNAME" "$DEVNAME"
 	fi
 
+	# Apply the config changes to wicked
 	hcnlog DEBUG "Bring up the $BONDNAME interface"
 	wicked ifreload "$BONDNAME"
 
