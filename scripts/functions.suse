@@ -389,12 +389,3 @@ suse_ifcfg_bond_modify()
 	return 1
 }
 
-wicked_reload()
-{
-	if [ $# -eq 0 ] ; then
-		rcnetwork reload
-	elif systemctl_is_active wicked.service ; then
-		wicked ifreload -- "$@"
-	fi
-}
-

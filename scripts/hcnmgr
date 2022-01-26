@@ -395,7 +395,7 @@ do_config_vdevice_wicked() {
 	fi
 
 	hcnlog DEBUG "Bring up the $BONDNAME interface"
-	wicked_reload "$BONDNAME"
+	wicked ifreload "$BONDNAME"
 
 	hcnlog DEBUG "do_config_vdevice: exit"
 	return $E_SUCCESS
@@ -455,7 +455,7 @@ rmhcn_nm() {
 rmhcn_wicked() {
 	hcnlog INFO "Delete bonding $BONDNAME"
 	suse_ifcfg_bond_delete "$BONDNAME"
-	wicked_reload "$BONDNAME"
+	wicked ifreload "$BONDNAME"
 }
 
 #
@@ -607,8 +607,7 @@ rmdev_nm() {
 rmdev_wicked() {
 	hcnlog DEBUG "rmdev_wicked: enter"
 	suse_ifcfg_bond_del_slave "$BONDNAME" "$DEVNAME"
-    wicked ifup "$BONDNAME"
-    wicked_reload "$BONDNAME"
+	wicked ifreload "$BONDNAME"
 	hcnlog DEBUG "rmdev_wicked: exit"
 	return $E_SUCCESS
 }
