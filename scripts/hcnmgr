@@ -31,6 +31,7 @@ PSERIES_PLATFORM=$(dirname "$0")/pseries_platform
 DT_PATH="/proc/device-tree"
 HCNMGR="hcnmgr"
 HCNCMD=""
+HCNTRACE=""
 LOG_FILE="/var/log/hcnmgr"
 HCN_LOGGING_LEVEL=DEBUG
 HCNID=0
@@ -68,6 +69,7 @@ usage() {
 	echo ""
 	echo "Optional arguments."
 	echo "  -s        scan device-tree and configure HCN"
+	echo "  -x        trace hcnmgr script execution"
 	echo "  -V        Display version information and exit"
 	echo "  -h        Display this help information and exit"
 	echo ""
@@ -858,7 +860,7 @@ if ! lsmod | grep -q bonding; then
 fi
 
 #getops for help and version
-while getopts "sVhd:" arg; do
+while getopts "sxVhd:" arg; do
 	case "$arg" in
 	V)
 		show_version
@@ -870,6 +872,9 @@ while getopts "sVhd:" arg; do
 		;;
 	s)
 		HCNCMD="hcnscan"
+		;;
+	x)
+		HCNTRACE="-x"
 		;;
 	d)
 		hcnlog DEBUG "HMC pass log level at $OPTARG"
@@ -884,6 +889,11 @@ done
 
 #Log this scripts command line to syslog
 hcnlog INFO "$HCNCMD $*"
+
+#Enable bash -x or -vx call trace if requested
+if [ "X$HCNTRACE" != "X" ] ; then
+	set "$HCNTRACE"
+fi
 
 #Parse the DRC_INDEX and HCN_ID from the arguments
 for param in "$@"; do
