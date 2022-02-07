@@ -910,8 +910,6 @@ scanhcn_wicked() {
 		else
 			hcnlog INFO "scanhcn failed to adjust bond '$bond' config primary to '$primary'"
 		fi
-		echo "* $bond config:"
-		cat $(suse_ifcfg_file_name "$bond")
 
 		if systemctl is-active -q wicked.service ; then
 			hcnlog INFO "scanhcn reloading HCN bonding: $bond"
