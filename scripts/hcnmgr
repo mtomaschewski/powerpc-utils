@@ -401,7 +401,7 @@ do_config_vdevice_wicked() {
 	if systemctl is-active -q wicked.service ; then
 		# Apply the config changes to wicked
 		hcnlog DEBUG "Bring up the $BONDNAME interface"
-		wicked ifreload "$BONDNAME"
+		wicked ifup "$BONDNAME"
 	fi
 
 	hcnlog DEBUG "do_config_vdevice: exit"
