@@ -840,25 +840,6 @@ echo "=======================$NOW============================"
 HCNCMD=$(basename "$0")
 hcnlog DEBUG "$HCNCMD enter"
 
-#Validate this tool is running on powerpc platform
-. "$PSERIES_PLATFORM"
-if [ "$platform" != "$PLATFORM_PSERIES_LPAR" ]; then
-	hcnlog INFO "HNV is only supported on PowerVM LPAR"
-	hcnlog INFO "$HCNCMD exit"
-	exit 0
-fi
-
-#Init the distribution and the network service
-check_network_service
-
-#Validate bonding module is loaded
-if ! lsmod | grep -q bonding; then
-	hcnlog DEBUG "HCNMGR: Bonding module not loaded, load module ..."
-	if ! modprobe bonding $BOND_MODPROBE_OPTS; then
-		err $E_NOMODULE
-	fi
-fi
-
 #getops for help and version
 while getopts "sxVhd:" arg; do
 	case "$arg" in
@@ -893,6 +874,25 @@ hcnlog INFO "$HCNCMD $*"
 #Enable bash -x or -vx call trace if requested
 if [ "X$HCNTRACE" != "X" ] ; then
 	set "$HCNTRACE"
+fi
+
+#Validate this tool is running on powerpc platform
+. "$PSERIES_PLATFORM"
+if [ "$platform" != "$PLATFORM_PSERIES_LPAR" ]; then
+	hcnlog INFO "HNV is only supported on PowerVM LPAR"
+	hcnlog INFO "$HCNCMD exit"
+	exit 0
+fi
+
+#Init the distribution and the network service
+check_network_service
+
+#Validate bonding module is loaded
+if ! lsmod | grep -q bonding; then
+	hcnlog DEBUG "HCNMGR: Bonding module not loaded, load module ..."
+	if ! modprobe bonding $BOND_MODPROBE_OPTS; then
+		err $E_NOMODULE
+	fi
 fi
 
 #Parse the DRC_INDEX and HCN_ID from the arguments
