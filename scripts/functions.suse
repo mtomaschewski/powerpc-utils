@@ -115,10 +115,6 @@ suse_ifcfg_bond_master_template()
 	if [ X"${options[*]}" = X ] ; then
 		# default options as used by the hcnmgr
 		options=(mode=active-backup miimon=100 fail_over_mac=follow)
-		# set 1st slave as primary to inherit the mac from (by default)
-		if [ X"${slaves[0]}" != X ] ; then
-			options+=("primary=${slaves[0]}")
-		fi
 	fi
 
 	echo "STARTMODE='auto'"
@@ -368,8 +364,6 @@ suse_ifcfg_bond_modify()
 		if [ X"$primary" != X ] ; then
 			if suse_wlist_find "$primary" "${nslaves[*]}" ; then
 				noptions+=("primary=$primary")
-			elif [ X"${nslaves[0]}" != X ] ; then
-				noptions+=("primary=${nslaves[0]}")
 			fi
 		fi
 	fi
