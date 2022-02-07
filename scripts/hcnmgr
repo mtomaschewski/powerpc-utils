@@ -614,7 +614,8 @@ rmdev_nm() {
 rmdev_wicked() {
 	hcnlog DEBUG "rmdev_wicked: enter"
 	suse_ifcfg_bond_del_slave "$BONDNAME" "$DEVNAME"
-	wicked ifreload "$BONDNAME"
+	wicked ifdown "$DEVNAME"
+	wicked ifup "$BONDNAME"
 	hcnlog DEBUG "rmdev_wicked: exit"
 	return $E_SUCCESS
 }
