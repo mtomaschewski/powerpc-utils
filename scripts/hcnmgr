@@ -948,7 +948,7 @@ check_network_service() {
 
 	#Validate distro service CLI packages is installed to manage networking
 	case $DISTRO in
-		sles)
+		sles|sled|*suse*)
 			SERVICE=$(systemctl show -P Id network.service 2>/dev/null)
 			case $SERVICE in
 				wicked.service)
