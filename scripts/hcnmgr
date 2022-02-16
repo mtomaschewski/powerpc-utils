@@ -638,11 +638,15 @@ show_hcnstatus() {
 			nmcli device status >>$LOG_FILE
 			;;
 		wicked.service)
-			wicked ifstatus all >>$LOG_FILE
+			if systemctl is-active -q "$SERVICE" ; then
+				wicked ifstatus all >>$LOG_FILE
+			else
+				hcnlog DEBUG "network service $SERVICE is currently inactive"
+			fi
 			;;
 	esac
 
-	ip addr show >>$LOG_FILE
+	ip -d addr show >>$LOG_FILE
 }
 
 #
